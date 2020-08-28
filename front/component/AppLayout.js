@@ -1,9 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 import { Menu, Input, Row, Col } from 'antd';
+import styled from 'styled-components';
+import UserProfile from '../component/UserProfile';
+import LoginForm from '../component/LoginForm';
+
+const SearchInput = styled(Input.Search)`
+    vertical-align : middle
+`
 
 const AppLayout = ({ children }) => {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
     return(
         <div>
             <Menu mode="horizontal">
@@ -14,9 +23,8 @@ const AppLayout = ({ children }) => {
                     <Link href="/profile"><a>프로필</a></Link>
                 </Menu.Item>
                 <Menu.Item>
-                    <Input.Search
+                    <SearchInput
                         onSearch={value => console.log(value)}
-                        style = {{ verticalAlign: "middle"}}
                         enterButton/>
                 </Menu.Item>
                 <Menu.Item>
@@ -25,14 +33,14 @@ const AppLayout = ({ children }) => {
             </Menu>
             <Row>
                 <Col xs={24} md={6}>
-                    왼쪽메뉴
+                    {isLoggedIn ? <UserProfile /> : <LoginForm />}
                 </Col>
                 <Col xs={24} md={12}>
                     <li>gkdl</li>
                     {children}
                 </Col>
                 <Col xs={24} md={6}>
-                    오른쪽 메뉴
+                    <a href="https://naver.com" target="_blank" rel="noreferrer noopener">Hi</a>
                 </Col>
             </Row>
         </div>
