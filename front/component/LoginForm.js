@@ -1,36 +1,43 @@
 import React, { useState, useCallback} from 'react';
+import PropTypes from 'prop-types';
 import {Form, Input, Button} from 'antd';
 import Link from 'next/link';
 import styled from 'styled-components';
+
+import useInput from '../hooks/useInput'
 
 /*
 버튼 감싸는 CSS를 styled로 재정의한다. 
 왜냐면, div 태그에다가 직접 수정할 시 일일히 다 리렌더링 되기 때문
 */
 const ButtonWrapper = styled.div`
-    margin-top : 10px
+    margin-top : 10px;
 `
 const InputWrapper = styled.div`
-    margin-bottom : 5px,
-    margin-top : 5px
+    margin-top : 10px;
+    margin-bottom : 5px;
 `
 
+const FormWrapper = styled(Form)`
+    padding : 10px;
+`
 
+const LoginForm = ({ setIsLoggedIn }) => {
+    const [id, onChangeId] = useInput('');
+    const [password, onChangePassword] = useInput('');
 
-const LoginForm = () => {
-    const [id, setId] = useState('');
-    const [password, setPassword] = useState('');
-
-    const onChangeId = useCallback((e) => {
-        setId(e.target.value)
-    }, []);
-    
-    const onChangePassword = useCallback((e) => {
-        setPassword(e.target.value)
-    }, []);
+    /*
+    Submit 되었을 때 콜백 함수. id, password를 받고 setIsLoggedIn 상태를 true로 변경.
+    */
+    const onSubmitForm = useCallback((e) => {
+        console.log(id, password)
+        setIsLoggedIn(true);
+    }, [id, password]);
     
     return (
-        <Form>
+        <FormWrapper
+            onFinish={onSubmitForm} // Submit 되었을 때 콜백
+        >
             <InputWrapper>
                 <label htmlFor="user-id"> 아이디 </label>
                 <br />
@@ -55,12 +62,13 @@ const LoginForm = () => {
                 로그인
                 </Button>
                 <Link href="/register"><a><Button>회원가입</Button></a></Link>
-            </ButtonWrapper>>
-            <div>
-            
-            </div>
-        </Form>
+            </ButtonWrapper>
+        </FormWrapper>
     );
+}
+
+LoginForm.propTypes = {
+    setIsLoggedIn: PropTypes.func.isRequired
 }
 
 export default LoginForm;

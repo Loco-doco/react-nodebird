@@ -11,6 +11,9 @@ const SearchInput = styled(Input.Search)`
 `
 
 const AppLayout = ({ children }) => {
+    /*
+    isLoggedIn, setIsLoggedIn 상태를 false로 설정(default)
+    */
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     return(
@@ -33,14 +36,14 @@ const AppLayout = ({ children }) => {
             </Menu>
             <Row>
                 <Col xs={24} md={6}>
-                    {isLoggedIn ? <UserProfile /> : <LoginForm />}
+                    {/*isLoggedIn이 True면 UserProfile에 setIsLoggedIn 상태를 담아서, 아니면 LoginForm을 현재 setIsLoggedIn 상태를 담아 호출*/}
+                    {isLoggedIn ? <UserProfile setIsLoggedIn={setIsLoggedIn}/> : <LoginForm setIsLoggedIn={setIsLoggedIn}/>}
                 </Col>
                 <Col xs={24} md={12}>
-                    <li>gkdl</li>
                     {children}
                 </Col>
                 <Col xs={24} md={6}>
-                    <a href="https://naver.com" target="_blank" rel="noreferrer noopener">Hi</a>
+                    <a href="https://naver.com" target="_blank" rel="noreferrer noopener">SenzTV</a>
                 </Col>
             </Row>
         </div>
