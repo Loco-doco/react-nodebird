@@ -1,14 +1,16 @@
 import React, { useCallback } from 'react';
 import { Card, Avatar, Button } from 'antd';
+import { useDispatch } from 'react-redux';
+import { logoutAction } from '../reducers/user';
 
-const UserProfile = ({ setIsLoggedIn }) => {
-
+const UserProfile = () => {
+    const dispatch = useDispatch();
     /*
     로그아웃 버튼 눌렀을 떄의 콜백 함수
     setIsLoggedIn 상태 변경
     */
     const onLogOut = useCallback((e) => {
-        setIsLoggedIn(false);
+        dispatch(logoutAction());
     },[]);
 
     return (

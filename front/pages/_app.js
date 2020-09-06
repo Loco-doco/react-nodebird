@@ -4,8 +4,9 @@ pages 안에 있는 페이지에 공통적으로 적용할 css들을 정리할 �
 */
 
 import React from 'react';
-import propTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import Head from 'next/head';
+import wrapper from '../store/configureStore';
 import 'antd/dist/antd.css'
 
 
@@ -21,8 +22,13 @@ const kennyBird = ( {Component} ) => {
     )
 }
 
-kennyBird.PropTypes = {
-    Component: propTypes.elementType.isRequired,
+kennyBird.propTypes = {
+    Component: PropTypes.elementType.isRequired,
 }
 
-export default kennyBird;
+export default wrapper.withRedux(kennyBird); // wrapper로 감싼 redux store를 kennyBird 컴포넌트에 일괄 적용
+/* 
+wrapper를 안쓰면
+withredux(configureStore)(kennyBird)
+이런식으로 
+*/

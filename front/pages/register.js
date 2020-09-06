@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 import Head from 'next/head';
 
 import AppLayout from '../component/AppLayout';
