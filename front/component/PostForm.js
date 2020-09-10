@@ -16,8 +16,7 @@ const PostForm = () => {
     const imageInput = useRef();
 
     const onClickImageUpload = useCallback(() => {
-        console.log('clicked!')
-        imageInput.current.link.click();
+        imageInput.current.click();
       }, [imageInput.current]);
 
     const onChangeText = useCallback((e)=> {
@@ -26,6 +25,7 @@ const PostForm = () => {
 
     const onSubmit = useCallback(() => {
         dispatch(addPost)
+        setText('')
     }, [])
 
     return(
