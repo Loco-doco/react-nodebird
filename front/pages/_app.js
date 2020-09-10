@@ -30,5 +30,5 @@ export default wrapper.withRedux(kennyBird); // wrapper로 감싼 redux store를
 /* 
 wrapper를 안쓰면
 withredux(configureStore)(kennyBird)
-이런식으로 
+이런식으로 쓸 수 있음
 */
