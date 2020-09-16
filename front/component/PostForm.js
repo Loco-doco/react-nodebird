@@ -1,4 +1,5 @@
 import React, { useCallback, useState, useRef} from 'react';
+import { useInputSetter }   from '../hooks/useInput'
 import {Form, Input, Button} from 'antd';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
@@ -11,7 +12,7 @@ const PostFormWrapper = styled(Form)`
 const PostForm = () => {
 
     const { imagePaths } = useSelector((state)=>state.post)
-    const [text, setText] = useState('');
+    const [text, setText, onChangeText] = useInputSetter('');
     const dispatch = useDispatch();
     const imageInput = useRef();
 
@@ -19,9 +20,9 @@ const PostForm = () => {
         imageInput.current.click();
       }, [imageInput.current]);
 
-    const onChangeText = useCallback((e)=> {
-        setText(e.target.value)
-    }, [])
+    // const onChangeText = useCallback((e)=> {
+    //     setText(e.target.value)
+    // }, [])
 
     const onSubmit = useCallback(() => {
         dispatch(addPost)

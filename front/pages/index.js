@@ -14,14 +14,17 @@ const Home = () => {
     })
 0
     return (
-        <AppLayout>
-            {isLoggedIn && <PostForm />}
-            {mainPosts.map((c)=> {
-                return (
-                    <PostCard key={c.id} post={c} />
-                )})
+        <div>
+            <AppLayout>
+                <div> 하이염 </div>
+                {isLoggedIn && <PostForm />}
+                {mainPosts.map((c)=> {
+                    return (
+                        <PostCard key={c.id} post={c} />
+                    )})
                 }
-        </AppLayout>
+            </AppLayout>
+        </div>
     )
 }
 

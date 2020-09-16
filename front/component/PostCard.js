@@ -1,11 +1,15 @@
 import React, { useCallback, useState} from 'react';
-import {Button, Card, Popover, Avatar} from 'antd';
-import { RetweetOutlined, HeartTwoTone, HeartOutlined, MessageOutlined, EllipsisOutlined, MessageFilled } from '@ant-design/icons';
-import styled from 'styled-components';
-import ButtonGroup from 'antd/lib/button/button-group';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
+import useInput from '../hooks/useInput'
+
+import styled from 'styled-components';
+import {Button, Card, Popover, Avatar, List, Comment} from 'antd';
+import { RetweetOutlined, HeartTwoTone, HeartOutlined, MessageOutlined, EllipsisOutlined, MessageFilled } from '@ant-design/icons';
+import ButtonGroup from 'antd/lib/button/button-group';
+
 import PostImages from './PostImages';
+import CommentForm from './CommentForm';
 
 const PostCard = ( { post }) => {
 
@@ -19,6 +23,7 @@ const PostCard = ( { post }) => {
     },[]);
 
     const id = useSelector((state) => state.user.user?.id);
+    console.log(post.Images[0]? true : false)
 
     return(
         <div style={{ marginBottom: 20 }}>
@@ -54,7 +59,21 @@ const PostCard = ( { post }) => {
             </Card>
             {commentFormOpened && (
                 <div>
-                    댓글부분
+                    <CommentForm post={post}/>
+                    <List 
+                        header={`${post.Comments.length}개의 댓글`}
+                        itemLayout = "horizontal"
+                        dataSource = {post.Comments}
+                        renderItem={(item)=>(
+                            <li>
+                                <Comment
+                                    author={item.User.nickname}
+                                    avatar={<Avatar>{item.User.nickname[0]}</Avatar>}
+                                    content={item.content}
+                                />
+                            </li>
+                        )}
+                    />
                 </div>
             )}
         </div>
@@ -69,7 +88,7 @@ PostCard.propTypes = {
         id: PropTypes.number,
         User: PropTypes.object,
         content: PropTypes.string,
-        Images: PropTypes.object,
+        Images: PropTypes.arrayOf(PropTypes.object),
         Comments: PropTypes.arrayOf(PropTypes.any),
         createdAt: PropTypes.arrayOf(PropTypes.any),
     }).isRequired
