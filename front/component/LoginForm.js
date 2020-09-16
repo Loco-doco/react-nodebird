@@ -3,7 +3,7 @@ import {Form, Input, Button} from 'antd';
 import Link from 'next/link';
 import styled from 'styled-components';
 
-import useInput from '../hooks/useInput';
+import { useInput } from '../hooks/useInput';
 
 import { useDispatch } from 'react-redux';
 import { loginAction } from '../reducers/user';

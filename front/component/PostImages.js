@@ -8,7 +8,7 @@ import { PlusOutlined } from '@ant-design/icons';
 const PostImages = ({ images }) => {
     const [showImagesZoom, setShowImagesZoom] = useState(false);
 
-    console.log(`images.length === ${images.length}`)
+    console.log(`PostImages 화면입니다.`)
     
     const onZoom = useCallback(() => {
         setShowImagesZoom(true);
@@ -20,16 +20,14 @@ const PostImages = ({ images }) => {
 
     
     if (images.length === 1) {
-        console.log(`images.length 첫번째 if문`)
         return(
             <>
                 <img role="presentation" src={images[0].src} alt={images[0].src} onClick={onZoom} />
-                {showImagesZoom && <ImagesZoom images={images} onClose={onClose}/>}
+                {showImagesZoom && <ImagesZoom images={images} onClose={onClose} />}
             </>
         );
     }
     if (images.length === 2) {
-        console.log(`images.length 두번째 if문`)
         return (
             <>
                 <img role="presentation" style={{ width:'50%', display: 'inline-block' }} src={images[0].src} alt={images[0].src} onClick={onZoom} />
@@ -40,7 +38,6 @@ const PostImages = ({ images }) => {
     }
     return(
         <>
-            {console.log("return 됨")}
             <div>
                 <img role="presentation" width="50%" src={images[0].src} alt={images[0].src} onClick={onZoom} />
                 <div

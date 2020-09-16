@@ -23,7 +23,6 @@ const PostCard = ( { post }) => {
     },[]);
 
     const id = useSelector((state) => state.user.user?.id);
-    console.log(post.Images[0]? true : false)
 
     return(
         <div style={{ marginBottom: 20 }}>
