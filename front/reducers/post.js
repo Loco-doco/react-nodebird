@@ -5,7 +5,7 @@ export const initialState = {
                 id:1,
                 nickname:"kenny"
             },
-            content: "첫번째 게시글임다",
+            content: "첫번째 게시글임다 #태그1#태그2 #태그3",
             Images: [{
                     src:"https://cocotimes.kr/wp-content/uploads/sites/2/2020/03/pc002029357-1.jpg"
                 },{
