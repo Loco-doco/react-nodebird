@@ -7,6 +7,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Head from 'next/head';
 import wrapper from '../store/configureStore';
+import withReduxSaga from 'next-redux-saga';
 import 'antd/dist/antd.css'
 
 
@@ -26,7 +27,7 @@ kennyBird.propTypes = {
     Component: PropTypes.elementType.isRequired,
 }
 
-export default wrapper.withRedux(kennyBird); // wrapper로 감싼 redux store를 kennyBird 컴포넌트에 일괄 적용
+export default wrapper.withRedux(withReduxSaga(kennyBird)); // wrapper로 감싼 redux store를 kennyBird 컴포넌트에 일괄 적용
 /* 
 wrapper를 안쓰면
 withredux(configureStore)(kennyBird)
