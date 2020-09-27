@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useRef} from 'react';
+import React, { useCallback, useState, useRef, useEffect} from 'react';
 import { useInputSetter }   from '../hooks/useInput'
 import {Form, Input, Button} from 'antd';
 import styled from 'styled-components';
@@ -11,23 +11,26 @@ const PostFormWrapper = styled(Form)`
 
 const PostForm = () => {
 
-    const { imagePaths } = useSelector((state)=>state.post)
+    // console.log('PostForm Component is rendered')
+
+    const { imagePaths, isAddPostSuccess } = useSelector((state)=>state.post)
     const [text, setText, onChangeText] = useInputSetter('');
     const dispatch = useDispatch();
-    const imageInput = useRef();
 
+    useEffect(()=> {
+        if(isAddPostSuccess){
+            setText('')
+        }
+    }, [isAddPostSuccess])
+
+    const imageInput = useRef();
     const onClickImageUpload = useCallback(() => {
         imageInput.current.click();
       }, [imageInput.current]);
 
-    // const onChangeText = useCallback((e)=> {
-    //     setText(e.target.value)
-    // }, [])
-
     const onSubmit = useCallback(() => {
-        dispatch(addPost)
-        setText('')
-    }, [])
+        dispatch(addPost(text))
+    }, [text])
 
     return(
         <PostFormWrapper encType="multipart/form-data" onFinish={onSubmit}>

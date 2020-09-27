@@ -13,6 +13,7 @@ import CommentForm from './CommentForm';
 import PostCardContent from './PostCardContent';
 
 const PostCard = ( { post }) => {
+    // console.log('PostCard Components is rendered')
 
     const [liked, setLiked] = useState(false);
     const [commentFormOpened, setCommentFormOpened] = useState(false);

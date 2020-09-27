@@ -6,9 +6,9 @@ import ImagesZoom from './ImagesZoom';
 import { PlusOutlined } from '@ant-design/icons';
 
 const PostImages = ({ images }) => {
-    const [showImagesZoom, setShowImagesZoom] = useState(false);
+    // console.log(`PostImages Component is rendered.`)
 
-    console.log(`PostImages 화면입니다.`)
+    const [showImagesZoom, setShowImagesZoom] = useState(false);
     
     const onZoom = useCallback(() => {
         setShowImagesZoom(true);

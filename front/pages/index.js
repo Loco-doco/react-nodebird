@@ -5,8 +5,8 @@ import PostCard from '../component/PostCard'
 import PostForm from '../component/PostForm'
 
 const Home = () => {
-    const isLoggedIn = useSelector((state) => {
-        return state.user.isLoggedIn
+    const isLoginSuccess = useSelector((state) => {
+        return state.user.isLoginSuccess
     })
 
     const mainPosts = useSelector((state) => {
@@ -17,7 +17,7 @@ const Home = () => {
         <div>
             <AppLayout>
                 <div> 하이염 </div>
-                {isLoggedIn && <PostForm />}
+                {isLoginSuccess && <PostForm />}
                 {mainPosts.map((c)=> {
                     return (
                         <PostCard key={c.id} post={c} />

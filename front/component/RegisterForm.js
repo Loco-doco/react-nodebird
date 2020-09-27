@@ -2,7 +2,12 @@ import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { Form, Input, Checkbox, Button } from 'antd';
 
-import useInput from '../hooks/useInput';
+import { useInput } from '../hooks/useInput';
+import { useDispatch, useSelector } from 'react-redux';
+
+import {
+    SIGNUP_REQUEST
+} from '../reducers/actions'
 
 const ErrorMessage = styled.div`
     color: red;
@@ -14,7 +19,12 @@ const SubmitButtonWrapper = styled.div`
 
 
 const RegisterForm = () => {
-    const [id, onChangeId] = useInput('');
+
+    const dispatch = useDispatch();
+    const isSignUpRequest = useSelector((state) = state.user.isSignUpRequest)
+
+
+    const [email, onChangeEmail] = useInput('');
     const [nickname, onChangeNickname] = useInput('');
     const [password, onChangePassword] = useInput('');
 
@@ -39,13 +49,24 @@ const RegisterForm = () => {
         if(!term){
             return setTermError(true)
         }
-    },[password, passwordCheck, term]);
+        return dispatch({
+            type: SIGNUP_REQUEST,
+            data: {
+              email,
+              password,
+              nickname,
+            },
+          });
+    },[email, password, passwordCheck, term]);
+
+
+
     return (
         <Form onFinish={onSubmit}>
             <div>
-                <label htmlFor="user-id">아이디</label>
+                <label htmlFor="user-email">아이디</label>
                 <br />
-                <Input name="user-id" value={id} required onChange={onChangeId} />
+                <Input name="user-email" type='email' value={email} required onChange={onChangeEmail} />
             </div>
             <div>
                 <label htmlFor="user-nickname">닉네임</label>
@@ -78,7 +99,7 @@ const RegisterForm = () => {
                 {termError && <ErrorMessage>약관에 동의하셔야 합니다.</ErrorMessage>}
             </div>
             <SubmitButtonWrapper>
-                <Button type='primary' htmlType='submit'> 가입하기 </Button>
+                <Button type='primary' htmlType='submit' loading={isSignUpRequest}> 가입하기 </Button>
             </SubmitButtonWrapper>
         </Form>
     )

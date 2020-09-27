@@ -1,31 +1,30 @@
 import React, { useCallback } from 'react';
 import { Card, Avatar, Button } from 'antd';
-import { useDispatch } from 'react-redux';
-import { logoutAction } from '../reducers/user';
+import { useDispatch, useSelector } from 'react-redux';
+import { logoutRequestAction } from '../reducers/user';
 
 const UserProfile = () => {
     const dispatch = useDispatch();
-    /*
-    로그아웃 버튼 눌렀을 떄의 콜백 함수
-    setIsLoggedIn 상태 변경
-    */
+    const user = useSelector((state) => state.user.user);
+    const isLogoutRequest = useSelector((state) => state.user.isLogoutRequest)
+
     const onLogOut = useCallback((e) => {
-        dispatch(logoutAction());
+        dispatch(logoutRequestAction());
     },[]);
 
     return (
         <Card
             actions={[
-                <div key="twit"> 구겐구겐 <br />0</div>,
-                <div key="following"> 팔로잉 <br />0</div>,
-                <div key="follower"> 팔로워 <br />0</div>
+                <div key="twit"> 구겐구겐 <br />{user.Posts.length}</div>,
+                <div key="following"> 팔로잉 <br />{user.Followings.length}</div>,
+                <div key="follower"> 팔로워 <br />{user.Followers.length}</div>
             ]}
         >
             <Card.Meta 
-                avatar = {<Avatar>ZC</Avatar>}
-                title = "kennybird"
+                avatar = {<Avatar>{user.nickname[0]}</Avatar>}
+                title = {user.nickname}
             />
-            <Button onClick={onLogOut}>로그아웃</Button>
+            <Button onClick={onLogOut} loading={isLogoutRequest} >로그아웃</Button>
         </Card>
     )
 }

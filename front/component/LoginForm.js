@@ -5,8 +5,8 @@ import styled from 'styled-components';
 
 import { useInput } from '../hooks/useInput';
 
-import { useDispatch } from 'react-redux';
-import { loginAction } from '../reducers/user';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginRequestAction } from '../reducers/user';
 
 /*
 버튼 감싸는 CSS를 styled로 재정의한다. 
@@ -26,25 +26,25 @@ const FormWrapper = styled(Form)`
 
 const LoginForm = () => {
     const dispatch = useDispatch();
-    const [id, onChangeId] = useInput('');
+    const isLoginRequest = useSelector((state) => state.user.isLoginRequest);
+    const [email, onChangeEmail] = useInput('');
     const [password, onChangePassword] = useInput('');
 
     /*
-    Submit 되었을 때 콜백 함수. id, password를 받고 setIsLoggedIn 상태를 true로 변경.
+    Submit 되었을 때 콜백 함수. email, password를 받고 setIsLoggedIn 상태를 true로 변경.
     */
     const onSubmitForm = useCallback((e) => {
-        console.log(id, password)
-        dispatch(loginAction({id, password}));
-    }, [id, password]);
+        dispatch(loginRequestAction({email, password}));
+    }, [email, password]);
     
     return (
         <FormWrapper
             onFinish={onSubmitForm} // Submit 되었을 때 콜백
         >
             <InputWrapper>
-                <label htmlFor="user-id"> 아이디 </label>
+                <label htmlFor="user-email"> 이메일 </label>
                 <br />
-                <Input name="user-id" value={id} onChange={onChangeId} required />
+                <Input name="user-email" type='email' value={email} onChange={onChangeEmail} required />
             </InputWrapper>
             <InputWrapper>
                 <label htmlFor="user-password"> 패스워드 </label>
@@ -60,9 +60,9 @@ const LoginForm = () => {
                 <Button
                     type="primary"
                     htmlType="submit"
-                    loading={false}
+                    loading={isLoginRequest}
                 >
-                로그인
+                    로그인
                 </Button>
                 <Link href="/register"><a><Button>회원가입</Button></a></Link>
             </ButtonWrapper>

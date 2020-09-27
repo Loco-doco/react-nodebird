@@ -15,10 +15,10 @@ const AppLayout = ({ children }) => {
     /*
     isLoggedIn, setIsLoggedIn 상태를 false로 설정(default)
     */
-    const isLoggedIn = useSelector((state)=> {
+    const user = useSelector((state)=> {
         // _app.js에서 withRedux로 스토어들에 접근간으하게 해뒀고 useSelector는 그 store값을 조회할 수 있는 권한이 생김
-        return state.user.isLoggedIn
-    });
+        return state.user.user
+    })
 
     return(
         <div>
@@ -40,8 +40,7 @@ const AppLayout = ({ children }) => {
             </Menu>
             <Row>
                 <Col xs={24} md={6}>
-                    {/*isLoggedIn이 True면 UserProfile에 setIsLoggedIn 상태를 담아서, 아니면 LoginForm을 현재 setIsLoggedIn 상태를 담아 호출*/}
-                    {isLoggedIn ? <UserProfile /> : <LoginForm />}
+                    {user ? <UserProfile /> : <LoginForm />}
                 </Col>
                 <Col xs={24} md={12}>
                     {children}
