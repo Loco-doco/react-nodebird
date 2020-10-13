@@ -21,7 +21,7 @@ const SubmitButtonWrapper = styled.div`
 const RegisterForm = () => {
 
     const dispatch = useDispatch();
-    const isSignUpRequest = useSelector((state) = state.user.isSignUpRequest)
+    const isSignUpRequest = useSelector((state) => state.user.isSignUpRequest)
 
 
     const [email, onChangeEmail] = useInput('');

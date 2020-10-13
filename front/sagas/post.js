@@ -1,20 +1,31 @@
 import { all, delay, fork, put, takeLatest } from "redux-saga/effects";
 import {
     ADD_POST_REQUEST, ADD_POST_SUCCESS, ADD_POST_FAILURE,
-    ADD_COMMENT_REQUEST, ADD_COMMENT_SUCCESS, ADD_COMMENT_FAILURE
+    REMOVE_POST_REQUEST, REMOVE_POST_SUCCESS, REMOVE_POST_FAILURE,
+    ADD_COMMENT_REQUEST, ADD_COMMENT_SUCCESS, ADD_COMMENT_FAILURE,
+    ADD_POST_TO_ME, REMOVE_POST_OF_ME
     } from '../reducers/actions'
+import shortId from 'shortid';
 
 function addPostAPI() {
     return axios.post('api/addPost')
 }
 
-function* addPost(){
+function* addPost(action){
     try{
-        // const result = yield call(addPostAPI)
+        console.log(`(Saga-addPost) action is ${action.data.content}`)
         yield delay(2000);
+        const id = shortId.generate();
         yield put({
             type: ADD_POST_SUCCESS,
-            // data: result.data
+            data: {
+                id: id,
+                content: action.data.content
+            }
+        })
+        yield put({
+            type: ADD_POST_TO_ME,
+            data: id
         })
     } catch(e) {
         yield put({
@@ -24,17 +35,42 @@ function* addPost(){
     }
 }
 
+function removePostAPI() {
+    return axios.post('api/removePost')
+}
+
+function* removePost(action){
+    try{
+        console.log(`(Saga-removePost) action is ${action.data}`)
+        yield delay(2000);
+        const id = shortId.generate();
+        yield put({
+            type: REMOVE_POST_SUCCESS,
+            data: action.data
+        })
+        yield put({
+            type: REMOVE_POST_OF_ME,
+            data: action.data
+        })
+    } catch(e) {
+        yield put({
+            type: REMOVE_POST_FAILURE,
+            error: e.response.data
+        })
+    }
+}
+
 function addCommentAPI() {
     return axios.post('api/addPost')
 }
 
-function* addComment(){
+function* addComment(action){
     try{
-        // const result = yield call(addCommentAPI)
-        yield delay(2000);
+        console.log(`(Saga-addComment) action is ${action.data}`)
+        yield delay(1000);
         yield put({
             type: ADD_COMMENT_SUCCESS,
-            // data: result.data
+            data: action.data
         })
     } catch(e) {
         yield put({
@@ -49,6 +85,10 @@ function* watchAddPost(){
     yield takeLatest(ADD_POST_REQUEST, addPost)
 }
 
+function* watchRemovePost(){
+    yield takeLatest(REMOVE_POST_REQUEST, removePost)
+}
+
 function* watchAddComment(){
     yield takeLatest(ADD_COMMENT_REQUEST, addComment)
 }
@@ -56,6 +96,7 @@ function* watchAddComment(){
 export default function* postSaga(){
     yield all([
         fork(watchAddPost),
+        fork(watchRemovePost),
         fork(watchAddComment)
     ])
 }

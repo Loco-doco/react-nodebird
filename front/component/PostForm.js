@@ -4,6 +4,8 @@ import {Form, Input, Button} from 'antd';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { addPost } from '../reducers/post'
+import { ADD_POST_REQUEST } from '../reducers/actions';
+import shortId from 'shortid';
 
 const PostFormWrapper = styled(Form)`
     margin: 10px 10px 20px;
@@ -13,7 +15,7 @@ const PostForm = () => {
 
     // console.log('PostForm Component is rendered')
 
-    const { imagePaths, isAddPostSuccess } = useSelector((state)=>state.post)
+    const { imagePaths, isAddPostSuccess, isAddPostRequest } = useSelector((state)=>state.post)
     const [text, setText, onChangeText] = useInputSetter('');
     const dispatch = useDispatch();
 
@@ -29,8 +31,12 @@ const PostForm = () => {
       }, [imageInput.current]);
 
     const onSubmit = useCallback(() => {
-        dispatch(addPost(text))
-    }, [text])
+        console.log(`text=${text}`)
+        return dispatch({
+            type: ADD_POST_REQUEST,
+            data: {content: text}
+        })
+    },[text]) // 반환할 객체를 명시해주어야 함.
 
     return(
         <PostFormWrapper encType="multipart/form-data" onFinish={onSubmit}>
@@ -43,7 +49,7 @@ const PostForm = () => {
             <div>
                 <input type="file" multiple hidden ref={imageInput} />
                 <Button onClick={onClickImageUpload}>이미지 업로드</Button>
-                <Button type="primary" style={{float:'right'}} htmlType="submit">짹짹쨱</Button>
+                <Button type="primary" style={{float:'right'}} htmlType="submit" loading={isAddPostRequest} >짹짹쨱</Button>
             </div>
             <div>
                 {imagePaths.map((v) => (

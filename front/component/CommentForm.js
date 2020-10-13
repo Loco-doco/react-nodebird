@@ -19,7 +19,7 @@ const CommentFormButtonWrapper = styled(Button)`
     position: absolute;
     right: 0px;
     bottom: -40px;
-    zIndex: 1;
+    z-Index: 1;
 `
 
 const CommentForm = ({ post }) => {
@@ -37,6 +37,7 @@ const CommentForm = ({ post }) => {
 
     const [commentText, setCommentText, onChangeCommentText] = useInputSetter('')
     const onSubmitComment = useCallback(()=>{
+        console.log(`commentText = ${commentText}`)
         return dispatch({
             type : ADD_COMMENT_REQUEST,
             data: {content : commentText, postId : post.id, userId: id}

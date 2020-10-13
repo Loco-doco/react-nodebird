@@ -1,7 +1,6 @@
 import React, { useCallback, useState} from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-import useInput from '../hooks/useInput'
 
 import styled from 'styled-components';
 import {Button, Card, Popover, Avatar, List, Comment} from 'antd';
@@ -11,9 +10,12 @@ import ButtonGroup from 'antd/lib/button/button-group';
 import PostImages from './PostImages';
 import CommentForm from './CommentForm';
 import PostCardContent from './PostCardContent';
+import { REMOVE_POST_REQUEST } from '../reducers/actions';
 
 const PostCard = ( { post }) => {
-    // console.log('PostCard Components is rendered')
+    console.log('(PostCard.js) post.content=', post.content)
+    const dispatch = useDispatch();
+    const { isRemovePostRequest } = useSelector((state) => state.post)
 
     const [liked, setLiked] = useState(false);
     const [commentFormOpened, setCommentFormOpened] = useState(false);
@@ -25,6 +27,13 @@ const PostCard = ( { post }) => {
     },[]);
 
     const id = useSelector((state) => state.user.user?.id);
+
+    const onRemovePost = useCallback(() => {
+        dispatch({
+            type: REMOVE_POST_REQUEST,
+            data: post.id
+        })
+    }, [])
 
     return(
         <div style={{ marginBottom: 20 }}>
@@ -40,10 +49,10 @@ const PostCard = ( { post }) => {
                         : <MessageOutlined key = "commentClosed" onClick={onToggleComment}/>,
                     <Popover key = "more" content={(
                         <ButtonGroup>
-                            {id && post.id === id ? ( // id를 가져왔고(=상태값이 true고), id와 포스트의 id가 같으면, 수정과 삭제가 표시되고, 아니면 신고가 표시됨 
+                            {id && post.User.id === id ? ( // id를 가져왔고(=상태값이 true고), id와 포스트의 id가 같으면, 수정과 삭제가 표시되고, 아니면 신고가 표시됨 
                                 <>
                                 <Button>수정</Button>
-                                <Button type="danger">삭제</Button>
+                                <Button type="danger" loadint = {isRemovePostRequest} onClick={onRemovePost}>삭제</Button>
                                 </>
                             ) : <Button>신고</Button> }
                         </ButtonGroup>

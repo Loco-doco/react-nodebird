@@ -1,8 +1,11 @@
 import {
     LOG_IN_REQUEST, LOG_IN_SUCCESS, LOG_IN_FAILURE,
     LOG_OUT_REQUEST, LOG_OUT_SUCCESS, LOG_OUT_FAILURE,
-    SIGNUP_REQUEST, SIGNUP_SUCCESS, SIGNUP_FAILURE
+    SIGNUP_REQUEST, SIGNUP_SUCCESS, SIGNUP_FAILURE,
+    CHANGE_NICKNAME_REQUEST, CHANGE_NICKNAME_SUCCESS, CHANGE_NICKNAME_FAILURE,
+    ADD_POST_TO_ME, REMOVE_POST_OF_ME
     } from './actions'
+import produce from 'immer';
 
 export const initialState = {
     isLoginRequest : false,
@@ -14,6 +17,9 @@ export const initialState = {
     isSignUpRequest : false,
     isSignUpSuccess : false,
     isSignUpFailure : null,
+    isChangeNicknameRequest : false,
+    isChangeNicknameSuccess : false,
+    isChangeNicknameFailure : null,
     user : null,
     signUpData : {},
     loginData : {},
@@ -24,8 +30,8 @@ const dummyUser = (data) => ({
     nickname: 'kenny',
     id: 1,
     Posts : [],
-    Followings : [],
-    Followers : []
+    Followings : [{nickname: "kenny"},{nickname: "kenny"},{nickname: "kenny"}],
+    Followers : [{nickname: "kenny"},{nickname: "kenny"},{nickname: "kenny"}]
 })
 
 export const loginRequestAction = (data) => {
@@ -45,78 +51,84 @@ export const logoutRequestAction = (data) => {
 
 
 const reducer = (state = initialState, action) => {
-    switch (action.type){
-        case LOG_IN_REQUEST : 
-            console.log(`reducer - ${LOG_IN_REQUEST} activated and I got action like ${action}`)
-            return {
-                ...state,
-                isLoginRequest : true,
-                isLoginSuccess : false,
-                isLoginFailure : null
-            };
-        case LOG_IN_SUCCESS : 
-            console.log('reducer - "LOG_IN_SUCCESS" activated')
-            return {
-                ...state,
-                isLoginRequest : false,
-                isLoginSuccess : true,
-                user : dummyUser(action.data)
-            };
-        case LOG_IN_FAILURE : 
-            console.log('reducer - "LOG_IN_FAILURE" activated')
-            return {
-                ...state,
-                isLoginRequest : false,
-                isLoginFailure : action.error
-            };
-        case LOG_OUT_REQUEST : 
-            console.log('reducer - "LOG_OUT_REQUEST" activated')
-            return {
-                ...state,
-                isLogoutRequest : true,
-                isLogoutSuccess : false,
-                isLogoutFailure : null
-            };
-        case LOG_OUT_SUCCESS : 
-        console.log('reducer - "LOG_OUT_SUCCESS" activated')
-            return {
-                ...state,
-                isLogoutRequest : false,
-                isLogoutSuccess : true,
-                user : null
-            };
-        case LOG_OUT_FAILURE : 
-            console.log('reducer - "LOG_OUT_FAILURE" activated')
-            return {
-                ...state,
-                isLogoutRequest : false,
-                isLogoutFailure : action.error
-            };
-        case SIGNUP_REQUEST : 
-            console.log('reducer - "SIGNUP_REQUEST" activated')
-            return {
-                ...state,
-                isSignUpRequest : true,
-                isSignUpSuccess : false,
-                isSignUpFailure : null
-            };
-        case SIGNUP_SUCCESS : 
-            console.log('reducer - "SIGNUP_SUCCESS" activated')
-            return {
-                ...state,
-                isSignUpRequest : false,
-                isSignUpSuccess : true
-            };
-        case SIGNUP_FAILURE : 
-            console.log('reducer - "SIGNUP_FAILURE" activated')
-            return {
-                ...state,
-                isSignUpRequest : false,
-                isSignUpFailure : action.error
-            };
-        default:
-            return state;
-    }
+    return produce(state, (draft) => {
+        switch (action.type){
+            case LOG_IN_REQUEST : 
+                console.log(`reducer - ${LOG_IN_REQUEST} activated and I got action like ${action}`)
+                draft.isLoginRequest = true;
+                draft.isLoginSuccess = false;
+                draft.isLoginFailure = null
+                break;
+            case LOG_IN_SUCCESS : 
+                console.log('reducer - "LOG_IN_SUCCESS" activated')
+                draft.isLoginRequest = false;
+                draft.isLoginSuccess = true;
+                draft.user = dummyUser(action.data);
+                break;
+            case LOG_IN_FAILURE : 
+                console.log('reducer - "LOG_IN_FAILURE" activated')
+                draft.isLoginRequest = false;
+                draft.isLoginFailure = action.error;
+                break;                
+            case LOG_OUT_REQUEST : 
+                console.log('reducer - "LOG_OUT_REQUEST" activated')
+                draft.isLogoutRequest = true;
+                draft.isLogoutSuccess = false;
+                draft.isLogoutFailure = null;
+                break;
+            case LOG_OUT_SUCCESS : 
+                console.log('reducer - "LOG_OUT_SUCCESS" activated')
+                draft.isLogoutRequest = false;
+                draft.isLogoutSuccess = true;
+                draft.user = null;
+                break;                
+            case LOG_OUT_FAILURE : 
+                console.log('reducer - "LOG_OUT_FAILURE" activated')
+                draft.isLogoutRequest = false;
+                draft.isLogoutFailure = action.error;
+                break;
+            case SIGNUP_REQUEST : 
+                console.log('reducer - "SIGNUP_REQUEST" activated')
+                draft.isSignUpRequest = true;
+                draft.isSignUpSuccess = false;
+                draft.isSignUpFailure = null;
+                break;
+            case SIGNUP_SUCCESS : 
+                console.log('reducer - "SIGNUP_SUCCESS" activated')
+                draft.isSignUpRequest = false;
+                draft.isSignUpSuccess = true;
+                break;
+            case SIGNUP_FAILURE : 
+                console.log('reducer - "SIGNUP_FAILURE" activated')
+                draft.isSignUpRequest = false;
+                draft.isSignUpFailure = action.error;
+                break;
+            case CHANGE_NICKNAME_REQUEST : 
+                console.log('reducer - "CHANGE_NICKNAME_REQUEST" activated')
+                draft.isChangeNicknameRequest = true;
+                draft.isChangeNicknameSuccess = false;
+                draft.isChangeNicknameFailure = null;
+                break;
+            case CHANGE_NICKNAME_SUCCESS : 
+                console.log('reducer - "CHANGE_NICKNAME_SUCCESS" activated')
+                draft.isChangeNicknameRequest = false;
+                draft.isChangeNicknameSuccess = true;
+                break;
+            case CHANGE_NICKNAME_FAILURE : 
+                console.log('reducer - "CHANGE_NICKNAME_FAILURE" activated')
+                draft.isChangeNicknameRequest = false;
+                draft.isChangeNicknameFailure = action.error;
+                break;
+            case ADD_POST_TO_ME:
+                draft.user.Posts.unshift({ id: action.data })
+                break;
+            case REMOVE_POST_OF_ME:
+                draft.user.Posts = draft.user.Posts.filter((v) => v.id !== action.data)
+                break;
+            default:
+                break;
+        }
+    })
 }
 
 export default reducer;
