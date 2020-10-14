@@ -1,32 +1,75 @@
 import {
     LOG_IN_REQUEST, LOG_IN_SUCCESS, LOG_IN_FAILURE,
     LOG_OUT_REQUEST, LOG_OUT_SUCCESS, LOG_OUT_FAILURE,
-    SIGNUP_REQUEST, SIGNUP_SUCCESS, SIGNUP_FAILURE
+    SIGNUP_REQUEST, SIGNUP_SUCCESS, SIGNUP_FAILURE, FOLLOW_REQUEST, UNFOLLOW_REQUEST, FOLLOW_SUCCESS, FOLLOW_FAILURE, UNFOLLOW_SUCCESS, UNFOLLOW_FAILURE
     } from '../reducers/actions';
 
 import { all, delay, fork, put, takeLatest } from "redux-saga/effects";
 
 
-function loginAPI(data) {
-    return axios.post('api/login')
+function unFollowUserAPI(data) {
+    return axios.post('api/unFollowUser')
 }
 
-function* logIn(action){
+function* unFollowUser(action){
     try{
-        // const result = yield call(loginAPI, action.data)
-        console.log('saga - logIn Generator Func activated')
+        // const result = yield call(unFollowUserAPI, action.data)
+        // console.log('saga - logIn Generator Func activated')
         // yield delay(2000);
         yield put({
-            type: LOG_IN_SUCCESS,
+            type: UNFOLLOW_SUCCESS,
             data: action.data
         })
     } catch(e) {
         yield put({
-            type: LOG_IN_FAILURE,
+            type: UNFOLLOW_FAILURE,
             error: e.response.data
         })
     }
 }
+
+function followUserAPI(data) {
+    return axios.post('api/followUser')
+}
+
+function* followUser(action){
+    try{
+        // const result = yield call(followUserAPI, action.data)
+        // console.log('saga - logIn Generator Func activated')
+        // yield delay(2000);
+        yield put({
+            type: FOLLOW_SUCCESS,
+            data: action.data
+        })
+    } catch(e) {
+        yield put({
+            type: FOLLOW_FAILURE,
+            error: e.response.data
+        })
+    }
+}
+
+function logInAPI(data) {
+    return axios.post('/api/login', data);
+  }
+  
+  function* logIn(action) {
+    try {
+      console.log('saga logIn');
+      // const result = yield call(logInAPI);
+      yield delay(1000);
+      yield put({
+        type: LOG_IN_SUCCESS,
+        data: action.data,
+      });
+    } catch (err) {
+      console.error(err);
+      yield put({
+        type: LOG_IN_FAILURE,
+        error: err.response.data,
+      });
+    }
+  }
 
 function logoutAPI() {
     return axios.post('api/logout')
@@ -70,6 +113,16 @@ function* signUp(){
     }
 }
 
+function* watchUnFollow() {
+    console.log('saga - watchUnFollow activated')
+    yield takeLatest(UNFOLLOW_REQUEST, unFollowUser);
+}
+
+function* watchFollow() {
+    console.log('saga - watchFollow activated')
+    yield takeLatest(FOLLOW_REQUEST, followUser);
+}
+
 function* watchLogIn() {
     console.log('saga - watchLogin activated')
     yield takeLatest(LOG_IN_REQUEST, logIn);
@@ -87,6 +140,8 @@ function* watchSignUp() {
 
 export default function* userSaga() {
     yield all([
+        fork(watchFollow),
+        fork(watchUnFollow),
         fork(watchLogIn),
         fork(watchLogOut),
         fork(watchSignUp)

@@ -11,6 +11,7 @@ import PostImages from './PostImages';
 import CommentForm from './CommentForm';
 import PostCardContent from './PostCardContent';
 import { REMOVE_POST_REQUEST } from '../reducers/actions';
+import FollowButton from './FollowButton';
 
 const PostCard = ( { post }) => {
     // console.log('(PostCard.js) post.content=', post.content)
@@ -52,7 +53,7 @@ const PostCard = ( { post }) => {
                             {id && post.User.id === id ? ( // id를 가져왔고(=상태값이 true고), id와 포스트의 id가 같으면, 수정과 삭제가 표시되고, 아니면 신고가 표시됨 
                                 <>
                                 <Button>수정</Button>
-                                <Button type="danger" loadint = {isRemovePostRequest} onClick={onRemovePost}>삭제</Button>
+                                <Button type="danger" loading = {isRemovePostRequest} onClick={onRemovePost}>삭제</Button>
                                 </>
                             ) : <Button>신고</Button> }
                         </ButtonGroup>
@@ -60,6 +61,7 @@ const PostCard = ( { post }) => {
                         <EllipsisOutlined />
                     </Popover>
                 ]}
+                extra = {id && <FollowButton post = {post} />}
             >
                 <Card.Meta 
                     avatar = {<Avatar>{post.User.nickname[0]}</Avatar>}
