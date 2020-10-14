@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 
 const PostCardContent = ({ postData }) => {
-    console.log(`(PostCardContent.js) postData = ${postData}`)
+    // console.log(`(PostCardContent.js) postData = ${postData}`)
 
     const regEx = /(#[^\s#]+)/g
 

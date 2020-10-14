@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Head from 'next/head';
+import Router from 'next/router';
 
 import AppLayout from '../component/AppLayout'
 import NicknameEditForm from '../component/NicknameEditForm'
@@ -8,6 +9,16 @@ import { useSelector } from 'react-redux';
 
 const Profiles = () => {
     const user = useSelector((state) => state.user.user);
+
+    useEffect(()=> {
+        if (!(user && user.id)){
+            Router.push('/');
+        }
+    }, [user && user.id])
+
+    if(!user){
+        return null;
+    }
 
     return (
         /* 여기서는 _app.js에서 공통적으로 적용한 Head 스타일을 커스터마이징 함.

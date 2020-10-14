@@ -13,7 +13,7 @@ import PostCardContent from './PostCardContent';
 import { REMOVE_POST_REQUEST } from '../reducers/actions';
 
 const PostCard = ( { post }) => {
-    console.log('(PostCard.js) post.content=', post.content)
+    // console.log('(PostCard.js) post.content=', post.content)
     const dispatch = useDispatch();
     const { isRemovePostRequest } = useSelector((state) => state.post)
 

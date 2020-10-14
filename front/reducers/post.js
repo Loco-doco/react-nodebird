@@ -1,49 +1,19 @@
 import {
     ADD_POST_REQUEST, ADD_POST_SUCCESS, ADD_POST_FAILURE,
     ADD_COMMENT_REQUEST, ADD_COMMENT_SUCCESS, ADD_COMMENT_FAILURE,
-    REMOVE_POST_REQUEST, REMOVE_POST_SUCCESS, REMOVE_POST_FAILURE
+    REMOVE_POST_REQUEST, REMOVE_POST_SUCCESS, REMOVE_POST_FAILURE, LOAD_POST_REQUEST, LOAD_POST_SUCCESS, LOAD_POST_FAILURE
     } from './actions'
 import produce from 'immer';
 import shortId from 'shortid'
+import faker from 'faker';
 
 export const initialState = {
-    mainPosts : [{
-            id: shortId.generate(),
-            User: {
-                id: shortId.generate(),
-                nickname:"kenny"
-            },
-            content: "첫번째 게시글임다 #태그1#태그2 #태그3",
-            Images: [{
-                    id: shortId.generate(),
-                    src:"https://cocotimes.kr/wp-content/uploads/sites/2/2020/03/pc002029357-1.jpg"
-                },{
-                    id: shortId.generate(),
-                    src:"https://i.pinimg.com/originals/60/6b/3d/606b3d53635879b3ce083c5b2ca1080b.jpg"
-                },{
-                    id: shortId.generate(),
-                    src:"https://i.pinimg.com/originals/60/6b/3d/606b3d53635879b3ce083c5b2ca1080b.jpg"
-                }
-            ],
-            Comments: [{
-                    id: shortId.generate(),
-                    User:{
-                        id: shortId.generate(),
-                        nickname:"kennykim"
-                    },
-                    content: "우와 댓글1"
-                },{
-                    id: shortId.generate(),
-                    User:{
-                        id: shortId.generate(),
-                        nickname:"kookenny"
-                    },
-                    content: "우와 댓글2"
-                }
-            ]   
-        }
-    ],
+    mainPosts : [],
     imagePaths : [],
+    hasMorePost: true,
+    isLoadPostRequest : false,
+    isLoadPostSuccess : false,
+    isLoadPostFailure : null,
     isAddPostRequest : false,
     isAddPostSuccess : false,
     isAddPostFailure : null,
@@ -55,9 +25,30 @@ export const initialState = {
     isAddCommentFailure : null
 };
 
+export const generateDummyPost = (number) => Array(number).fill().map(() => ({
+    id: shortId.generate(),
+    User: {
+        id: shortId.generate(),
+        nickname: faker.name.findName()
+    },
+    content: faker.lorem.paragraph(),
+    Images: [{
+        src: faker.image.image(),
+    }],
+    Comments: [{
+        id: shortId.generate(),
+        User: {
+            id: shortId.generate(),
+            nickname: faker.name.findName()
+        },
+        content: faker.lorem.sentence()
+    }],
+}))
+
+
 const dummyPost = (data) =>{
-    console.log(`(dummyPost) data.id = ${data.id}`)
-    console.log(`(dummyPost) data.content = ${data.text}`)
+    // console.log(`(dummyPost) data.id = ${data.id}`)
+    // console.log(`(dummyPost) data.content = ${data.text}`)
     return {
         id: data.id,
         content: data.content,
@@ -92,24 +83,36 @@ export const addComment = (data) => ({
 
 
 const reducer = (state = initialState, action) => {
-    console.log(`It's in post-reducer and data is ${action.data}`)
+    // console.log(`It's in post-reducer and data is ${action.data}`)
     return produce(state, (draft) => {
         switch (action.type){
+            case LOAD_POST_REQUEST:
+                draft.isLoadPostRequest = true;
+                draft.isLoadPostSuccess = false;
+                draft.isLoadPostFailue = null;
+                break;
+            case LOAD_POST_SUCCESS:
+                draft.mainPosts = action.data.concat(draft.mainPosts);
+                draft.isLoadPostRequest = false;
+                draft.isLoadPostSuccess = true;
+                draft.hasMorePost = draft.mainPosts.length < 50;
+                break;
+            case LOAD_POST_FAILURE:
+                draft.isLoadPostRequest = false;
+                draft.isLoadPostFailue = action.error;
+                break;
             case ADD_POST_REQUEST:
                 draft.isAddPostRequest = true;
                 draft.isAddPostSuccess = false;
                 draft.isAddPostFailue = null;
                 break;
             case ADD_POST_SUCCESS:
-                draft.mainPosts = [
-                    dummyPost(action.data),
-                    ...state.mainPosts,
-                ];
+                draft.mainPosts.unshift(dummyPost(action.data));
                 draft.isAddPostRequest = false;
                 draft.isAddPostSuccess = true;
                 break;
             case ADD_POST_FAILURE:
-                draft.isAddPostSuccess = false;
+                draft.isAddPostRequest = false;
                 draft.isAddPostFailue = action.error;
                 break;
             case REMOVE_POST_REQUEST:
@@ -123,7 +126,7 @@ const reducer = (state = initialState, action) => {
                 draft.isRemovePostSuccess= true;
                 break;
             case REMOVE_POST_FAILURE:
-                draft.isRemovePostSuccess = false;
+                draft.isRemovePostRequest = false;
                 draft.isRemovePostFailue = action.error;
                 break;
             case ADD_COMMENT_REQUEST:
