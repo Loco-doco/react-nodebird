@@ -53,6 +53,8 @@ function* addPost(action) {
       data: {
         id: id,
         content: action.data.content,
+        userId: action.data.userId,
+        userNickname: action.data.userNickname
       },
     });
     yield put({

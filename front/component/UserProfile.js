@@ -17,7 +17,7 @@ const UserProfile = () => {
       actions={[
         <div key="twit">
           {" "}
-          구겐구겐 <br />
+          {user.nickname} <br />
           {user.Posts.length}
         </div>,
         <div key="following">
@@ -33,7 +33,7 @@ const UserProfile = () => {
       ]}
     >
       <Card.Meta
-        avatar={<Avatar>{user.nickname[0]}</Avatar>}
+        avatar={<Avatar>{user.nickname}</Avatar>}
         title={user.nickname}
       />
       <Button onClick={onLogOut} loading={isLogoutRequest}>

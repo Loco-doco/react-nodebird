@@ -17,6 +17,9 @@ const PostForm = () => {
   const { imagePaths, isAddPostSuccess, isAddPostRequest } = useSelector(
     (state) => state.post
   );
+  const { id, nickname} = useSelector(
+    (state) => state.user.user
+  )
   const [text, setText, onChangeText] = useInputSetter("");
   const dispatch = useDispatch();
 
@@ -35,9 +38,9 @@ const PostForm = () => {
     console.log(`text=${text}`);
     return dispatch({
       type: ADD_POST_REQUEST,
-      data: { content: text },
+      data: { content: text, userId: id, userNickname: nickname},
     });
-  }, [text]); // 반환할 객체를 명시해주어야 함.
+  }, [text, id, nickname]); // 반환할 객체를 명시해주어야 함.
 
   return (
     <PostFormWrapper encType="multipart/form-data" onFinish={onSubmit}>

@@ -68,8 +68,8 @@ const dummyPost = (data) => {
     id: data.id,
     content: data.content,
     User: {
-      id: 1,
-      nickname: "구궤니",
+      id: data.userId,
+      nickname: data.userNickname,
     },
     Images: [],
     Comments: [],
