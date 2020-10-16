@@ -1,11 +1,13 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
+import { useInput } from "../hooks/useInput";
+import { useDispatch, useSelector } from "react-redux";
+import Router from 'next/router';
+
+import { SIGNUP_REQUEST } from "../reducers/actions";
+
 import styled from "styled-components";
 import { Form, Input, Checkbox, Button } from "antd";
 
-import { useInput } from "../hooks/useInput";
-import { useDispatch, useSelector } from "react-redux";
-
-import { SIGNUP_REQUEST } from "../reducers/actions";
 
 const ErrorMessage = styled.div`
   color: red;
@@ -17,7 +19,19 @@ const SubmitButtonWrapper = styled.div`
 
 const RegisterForm = () => {
   const dispatch = useDispatch();
-  const isSignUpRequest = useSelector((state) => state.user.isSignUpRequest);
+  const { isSignUpRequest, isSignUpSuccess, isSignUpFailure }= useSelector((state) => state.user);
+
+  useEffect(() => {
+    if(isSignUpSuccess) {
+      Router.push('/')
+    }
+  }, [isSignUpSuccess])
+
+  useEffect(() => {
+    if(isSignUpFailure) {
+      alert(isSignUpFailure)
+    }
+  }, [isSignUpFailure])
 
   const [email, onChangeEmail] = useInput("");
   const [nickname, onChangeNickname] = useInput("");
@@ -57,7 +71,7 @@ const RegisterForm = () => {
         },
       });
     },
-    [email, password, passwordCheck, term]
+    [email, nickname, password, passwordCheck, term]
   );
 
   return (

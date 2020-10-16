@@ -1,4 +1,4 @@
-module.exports = (sequelize, DataTypes) => {
+const HashtagModel = (sequelize, DataTypes) => {
   const Hashtag = sequelize.define('Hashtag', {
     name: {
       type: DataTypes.STRING(20),
@@ -14,3 +14,5 @@ module.exports = (sequelize, DataTypes) => {
   };
   return Hashtag;
 }
+
+export default HashtagModel;

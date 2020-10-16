@@ -1,4 +1,4 @@
-module.exports = (sequelize, DataTypes) => {
+const ImageModel = (sequelize, DataTypes) => {
   const Image = sequelize.define('Image', {
     src: {
       type: DataTypes.STRING(200),
@@ -14,3 +14,5 @@ module.exports = (sequelize, DataTypes) => {
   };
   return Image;
 }
+
+export default ImageModel;

@@ -1,4 +1,4 @@
-module.exports = (sequelize, DataTypes) => {
+const UserModel = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
     email: {
       type: DataTypes.STRING(45),
@@ -22,8 +22,10 @@ module.exports = (sequelize, DataTypes) => {
     db.User.hasMany(db.Post);
     db.User.hasMany(db.Comment);
     db.User.belongsToMany(db.Post, { through: 'Like' , as: 'LikedPost'});
-    db.User.belongsToMany(db.User, { through: 'Flollow', as: 'Followers', foreignKey: 'FollowingId' })
-    db.User.belongsToMany(db.User, { through: 'Flollow', as: 'Followings', foreignKey: 'FollowerId' })
+    db.User.belongsToMany(db.User, { through: 'Follow', as: 'Followers', foreignKey: 'FollowingId' })
+    db.User.belongsToMany(db.User, { through: 'Follow', as: 'Followings', foreignKey: 'FollowerId' })
   };
   return User;
 }
+
+export default UserModel;

@@ -16,7 +16,8 @@ import {
   UNFOLLOW_FAILURE,
 } from "../reducers/actions";
 
-import { all, delay, fork, put, takeLatest } from "redux-saga/effects";
+import { all, delay, fork, put, takeLatest, call } from "redux-saga/effects";
+import axios from 'axios';
 
 function unFollowUserAPI(data) {
   return axios.post("api/unFollowUser");
@@ -103,15 +104,14 @@ function* logOut() {
   }
 }
 
-function signUpAPI() {
-  return axios.post("api/signup");
+function signUpAPI(data) {
+  return axios.post("http://localhost:3065/user", data);
 }
 
-function* signUp() {
+function* signUp(action) {
   try {
-    // const result = yield call(logoutAPI)
-    console.log("saga - signUp Generator Func is activated");
-    yield delay(1000);
+    const result = yield call(signUpAPI, action.data)
+    console.log(result);
     yield put({
       type: SIGNUP_SUCCESS,
       // data: result.data
