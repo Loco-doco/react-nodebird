@@ -8,9 +8,8 @@ import { WechatFilled } from "@ant-design/icons";
 
 const Home = () => {
   const dispatch = useDispatch();
-  const isLoginSuccess = useSelector((state) => {
-    return state.user.isLoginSuccess;
-  });
+
+  const {user} = useSelector((state) => state.user);
   const { mainPosts, hasMorePost, isLoadPostRequest } = useSelector((state) => {
     return state.post;
   });
@@ -48,7 +47,7 @@ const Home = () => {
     <div>
       <AppLayout>
         <div> 하이염 </div>
-        {isLoginSuccess && <PostForm />}
+        {user && <PostForm />}
         {mainPosts.map((c) => {
           return <PostCard key={c.id} post={c} />;
         })}

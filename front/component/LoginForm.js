@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { Form, Input, Button } from "antd";
 import Link from "next/link";
 import styled from "styled-components";
@@ -26,9 +26,15 @@ const FormWrapper = styled(Form)`
 
 const LoginForm = () => {
   const dispatch = useDispatch();
-  const isLoginRequest = useSelector((state) => state.user.isLoginRequest);
+  const { isLoginRequest, isLoginFailure }= useSelector((state) => state.user);
   const [email, onChangeEmail] = useInput("");
   const [password, onChangePassword] = useInput("");
+
+  useEffect(() => {
+    if(isLoginFailure){
+      alert(isLoginFailure)
+    }
+  }, [isLoginFailure])
 
   /*
     Submit 되었을 때 콜백 함수. email, password를 받고 setIsLoggedIn 상태를 true로 변경.

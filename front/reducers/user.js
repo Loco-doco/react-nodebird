@@ -129,7 +129,7 @@ const reducer = (state = initialState, action) => {
         console.log('reducer - "LOG_IN_SUCCESS" activated');
         draft.isLoginRequest = false;
         draft.isLoginSuccess = true;
-        draft.user = dummyUser(action.data);
+        draft.user = action.data;
         break;
       case LOG_IN_FAILURE:
         console.log('reducer - "LOG_IN_FAILURE" activated');

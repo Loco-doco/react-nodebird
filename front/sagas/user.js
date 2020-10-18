@@ -62,17 +62,16 @@ function* followUser(action) {
 }
 
 function logInAPI(data) {
-  return axios.post("/api/login", data);
+  return axios.post("/user/login", data);
 }
 
 function* logIn(action) {
   try {
-    console.log("saga logIn");
-    // const result = yield call(logInAPI);
-    yield delay(1000);
+    const result = yield call(logInAPI, action.data);
+    console.log("responsed data is ", result)
     yield put({
       type: LOG_IN_SUCCESS,
-      data: action.data,
+      data: result.data,
     });
   } catch (err) {
     console.error(err);
@@ -84,14 +83,12 @@ function* logIn(action) {
 }
 
 function logoutAPI() {
-  return axios.post("api/logout");
+  return axios.post("/user/logout");
 }
 
 function* logOut() {
   try {
-    // const result = yield call(logoutAPI)
-    console.log("saga - logout Generator Func is activated");
-    yield delay(2000);
+    yield call(logoutAPI)
     yield put({
       type: LOG_OUT_SUCCESS,
       // data: result.data
@@ -105,7 +102,7 @@ function* logOut() {
 }
 
 function signUpAPI(data) {
-  return axios.post("http://localhost:3065/user", data);
+  return axios.post("/user", data);
 }
 
 function* signUp(action) {

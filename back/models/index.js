@@ -34,3 +34,4 @@ db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
 module.exports = db;
+// export default db; 로 했을 시 object 값 그 자체를 넘김
