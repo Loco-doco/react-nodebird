@@ -35,12 +35,12 @@ const PostForm = () => {
   }, [imageInput.current]);
 
   const onSubmit = useCallback(() => {
-    console.log(`text=${text}`);
+    // return dispatch(addPost(text));
     return dispatch({
       type: ADD_POST_REQUEST,
-      data: { content: text, userId: id, userNickname: nickname},
+      data: {content: text},
     });
-  }, [text, id, nickname]); // 반환할 객체를 명시해주어야 함.
+  }, [text]); // 반환할 객체를 명시해주어야 함.
 
   return (
     <PostFormWrapper encType="multipart/form-data" onFinish={onSubmit}>

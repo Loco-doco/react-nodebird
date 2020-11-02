@@ -2,11 +2,12 @@ import express from 'express';
 import bcrypt from 'bcrypt';
 import passport from 'passport';
 import { User, Post } from '../models';
+import { isLoggedIn, isNotLoggedIn } from './middlewares';
 
 const router = express.Router();
 
 // login API
-router.post('/login', (req, res, next) => {
+router.post('/login', isNotLoggedIn, (req, res, next) => {
   passport.authenticate('local', (e, user, info) => { // done의 매개변수들
     // 예외처리1: 예측 못한 에러가 있는 경우
     if (e) {
@@ -42,7 +43,7 @@ router.post('/login', (req, res, next) => {
         }]
       })
 
-      console.log("login Success user =", loginDoneUser)
+      // console.log("login Success user =", loginDoneUser)
       // 사용자 정보 넘겨줌
       return res.status(200).json(loginDoneUser)
     })
@@ -50,7 +51,7 @@ router.post('/login', (req, res, next) => {
 });
 
 // signupAPI
-router.post('/', async (req, res, next) => { // POST /user
+router.post('/', isNotLoggedIn, async (req, res, next) => { // POST /user
   try{
     const exUser = await User.findOne({
       where: {
@@ -82,7 +83,7 @@ router.post('/', async (req, res, next) => { // POST /user
 })
 
 // logout API
-router.post('/logout', (req, res) => {
+router.post('/logout', isLoggedIn, (req, res) => {
   req.logout();
   req.session.destroy();
   res.send('OK');

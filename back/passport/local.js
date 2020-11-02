@@ -24,12 +24,14 @@ const Locals = () => {
       }
       console.log("로그인 시도하는 유저의 PW ", password)
       console.log("실제 유저의 PW ", user.password)
+      
       const result = await bcrypt.compare(password, user.password)
       if(result){
         return done(null, user)
       }
       // 예외처리2 : 비밀번호 틀린 경우
       return done(null, false, { reason: '비밀번호가 틀렸슴다'})
+
     } catch(e) {
       console.error(e);
       return done(e);

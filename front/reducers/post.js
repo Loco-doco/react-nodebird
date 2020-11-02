@@ -61,29 +61,29 @@ export const generateDummyPost = (number) =>
       ],
     }));
 
-const dummyPost = (data) => {
-  // console.log(`(dummyPost) data.id = ${data.id}`)
-  // console.log(`(dummyPost) data.content = ${data.text}`)
-  return {
-    id: data.id,
-    content: data.content,
-    User: {
-      id: data.userId,
-      nickname: data.userNickname,
-    },
-    Images: [],
-    Comments: [],
-  };
-};
+// const dummyPost = (data) => {
+//   // console.log(`(dummyPost) data.id = ${data.id}`)
+//   // console.log(`(dummyPost) data.content = ${data.text}`)
+//   return {
+//     id: data.id,
+//     content: data.content,
+//     User: {
+//       id: data.userId,
+//       nickname: data.userNickname,
+//     },
+//     Images: [],
+//     Comments: [],
+//   };
+// };
 
-const dummyComment = (data) => ({
-  id: 2,
-  content: data,
-  User: {
-    id: 1,
-    nickname: "구궤니",
-  },
-});
+// const dummyComment = (data) => ({
+//   id: 2,
+//   content: data,
+//   User: {
+//     id: 1,
+//     nickname: "구궤니",
+//   },
+// });
 
 export const addPost = (data) => ({
   type: ADD_POST_REQUEST,
@@ -120,7 +120,7 @@ const reducer = (state = initialState, action) => {
         draft.isAddPostFailue = null;
         break;
       case ADD_POST_SUCCESS:
-        draft.mainPosts.unshift(dummyPost(action.data));
+        draft.mainPosts.unshift(action.data);
         draft.isAddPostRequest = false;
         draft.isAddPostSuccess = true;
         break;
@@ -148,23 +148,11 @@ const reducer = (state = initialState, action) => {
         draft.isAddCommentFailue = null;
         break;
       case ADD_COMMENT_SUCCESS: {
-        const post = draft.mainPosts.find((v) => v.id === action.data.postId);
-        post.Comments.unshift(dummyComment(action.data.content));
+        const post = draft.mainPosts.find((v) => v.id === action.data.PostId);
+        post.Comments.unshift(action.data);
         draft.isAddCommentRequest = false;
         draft.isAddCommentSuccess = true;
         break;
-        // const postIndex = state.mainPosts.findIndex((v) => v.id === action.data.postId);
-        // const post = { ...state.mainPosts[postIndex] };
-        // post.Comments = [dummyComment(action.data.content), ...post.Comments];
-        // const mainPosts = [...state.mainPosts];
-        // mainPosts[postIndex] = post;
-
-        // return {
-        //     ...state,
-        //     mainPosts,
-        //     isAddCommentRequest : false,
-        //     isAddCommentSuccess: true
-        // }
       }
       case ADD_COMMENT_FAILURE:
         draft.isAddCommentSuccess = false;

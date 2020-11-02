@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import PostCard from "../component/PostCard";
 import PostForm from "../component/PostForm";
 import { LOAD_POST_REQUEST } from "../reducers/actions";
-import { WechatFilled } from "@ant-design/icons";
 
 const Home = () => {
   const dispatch = useDispatch();

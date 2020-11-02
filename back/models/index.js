@@ -35,3 +35,4 @@ db.Sequelize = Sequelize;
 
 module.exports = db;
 // export default db; 로 했을 시 object 값 그 자체를 넘김
+// module.exports 로 db를 export 할 시, db의 object 내부 값을 넘김

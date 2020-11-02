@@ -51,6 +51,10 @@ app.get('/', (req, res) => {
 app.use('/post', postRouter)
 app.use('/user', userRouter)
 
+// 에러 처리 미들웨어
+// app.use((err, req, res, next) => {
+
+// })
 
 app.listen(3065, () => {
   console.log("Server is running")
